@@ -1,4 +1,4 @@
-# 02. GIT. Local
+# 02. GIT. Local	
 
 Initialize local repository on your test host. Create the following branches:
 
