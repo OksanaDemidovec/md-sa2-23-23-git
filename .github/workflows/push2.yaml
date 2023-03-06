@@ -1,0 +1,26 @@
+name: Find Tabs
+
+on:
+  push:
+    branches:
+      - master 
+      - dev
+
+jobs:
+  find-tabs:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Find tabs
+      run: |
+        TABS=$(grep -r -n $'\t' ${{ github.workspace }}/ | wc -l)
+        echo "::set-output name=tabs-count::$TABS"
+      id: find-tabs
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: tabs
+        path: tabs.txt
