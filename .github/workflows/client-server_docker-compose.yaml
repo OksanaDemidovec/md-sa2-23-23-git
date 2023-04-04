@@ -36,7 +36,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: ghcr.io/OksanaDemidovec/docker_build:1
+          tags: ghcr.io/oksanademidovec/docker_build:1
 
       - name: Slack SUCCESS Notification
         uses: rtCamp/action-slack-notify@v2
