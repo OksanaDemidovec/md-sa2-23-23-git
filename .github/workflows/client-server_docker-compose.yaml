@@ -31,13 +31,22 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build and push Docker images
+      - name: Build and push Docker images for server
         uses: docker/compose-cli-action@v0.6.0
         with:
           compose-file: ./08.Docker-compose/docker-compose.yaml
           project-directory: ./08.Docker-compose/
           push: true
-          tags: ghcr.io/oksanademidovec/docker_build:1
+          service-1-image: ghcr.io/oksanademidovec/server:1
+
+      - name: Build and push Docker images for client
+        uses: docker/compose-cli-action@v0.6.0
+        with:
+          compose-file: ./08.Docker-compose/docker-compose.yaml
+          project-directory: ./08.Docker-compose/
+          push: true
+          service-2-image: ghcr.io/oksanademidovec/client:1
+
 
       - name: Slack SUCCESS Notification
         uses: rtCamp/action-slack-notify@v2
