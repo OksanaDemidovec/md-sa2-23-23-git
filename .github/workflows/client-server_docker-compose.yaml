@@ -35,7 +35,7 @@ jobs:
         uses: docker/compose-cli-action@v0.6.0
         with:
           compose-file: ./08.Docker-compose/docker-compose.yaml
-          project-directory: ./08.Docker-compose/
+          project-directory: ./08.Docker-compose/server
           push: true
           service-1-image: ghcr.io/oksanademidovec/server:1
 
@@ -43,7 +43,7 @@ jobs:
         uses: docker/compose-cli-action@v0.6.0
         with:
           compose-file: ./08.Docker-compose/docker-compose.yaml
-          project-directory: ./08.Docker-compose/
+          project-directory: ./08.Docker-compose/client
           push: true
           service-2-image: ghcr.io/oksanademidovec/client:1
 
