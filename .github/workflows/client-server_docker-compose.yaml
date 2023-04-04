@@ -35,6 +35,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: ./08.Docker-compose/
+          dockerfile: docker-compose.yaml
           push: true
           tags: ghcr.io/oksanademidovec/docker_build:1
 
