@@ -39,7 +39,7 @@ jobs:
       - name: Build and push Docker images for server
         uses: isbang/compose-action@v1.4.1
         with:
-          compose-file: ".08.Docker-compose/docker-compose.yaml"
+          compose-file: "./08.Docker-compose/docker-compose.yaml"
           down-flags: "--volumes"
           services: |
             server
