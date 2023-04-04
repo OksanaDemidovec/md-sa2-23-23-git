@@ -32,20 +32,13 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build and push Docker images for server
-        uses: docker/compose-cli-action@v0.6.0
+        uses: isbang/compose-action@v1.4.1
         with:
-          compose-file: ./08.Docker-compose/docker-compose.yaml
-          project-directory: ./08.Docker-compose/server
-          push: true
-          service-1-image: ghcr.io/oksanademidovec/server:1
-
-      - name: Build and push Docker images for client
-        uses: docker/compose-cli-action@v0.6.0
-        with:
-          compose-file: ./08.Docker-compose/docker-compose.yaml
-          project-directory: ./08.Docker-compose/client
-          push: true
-          service-2-image: ghcr.io/oksanademidovec/client:1
+          compose-file: "./docker/docker-compose.yml"
+          down-flags: "--volumes"
+          services: |
+            server
+            client
 
 
       - name: Slack SUCCESS Notification
