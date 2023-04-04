@@ -32,10 +32,10 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build and push Docker images
-        uses: docker/build-push-action@v2
+        uses: docker/compose-cli-action@v0.6.0
         with:
-          context: ./08.Docker-compose/
-          dockerfile: docker-compose.yaml
+          compose-file: ./08.Docker-compose/docker-compose.yaml
+          project-directory: ./08.Docker-compose/
           push: true
           tags: ghcr.io/oksanademidovec/docker_build:1
 
