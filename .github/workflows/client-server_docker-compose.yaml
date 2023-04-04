@@ -42,21 +42,21 @@ jobs:
         uses: rtCamp/action-slack-notify@v2
         if: success()
         env:
-          SLACK_CHANNEL: git_md-sa2-23-23
+          SLACK_CHANNEL: "#git_md-sa2-23-23"
           SLACK_COLOR: 'green'
           SLACK_ICON: https://github.com/rtCamp.png?size=48
           SLACK_MESSAGE: 'Build ${{github.ref_name}} success '
           SLACK_TITLE: Build status
-          SLACK_USERNAME: oksana demidovec
+          SLACK_USERNAME: incoming-webhook
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-      - name: Slack FAIL notification
+      - name: Slack FAIL Notification
         uses: rtCamp/action-slack-notify@v2
         if: failure()
         env:
-          SLACK_CHANNEL: git_md-sa2-23-23
+          SLACK_CHANNEL: "#git_md-sa2-23-23"
           SLACK_COLOR: 'red'
-          SLACK_ICON: https://github.com/rtCamp.png?size=48
+          SLACK_ICON: https://avatars.slack-edge.com/temp/2023-04-04/5047162897927_64e65181837c0ae8bd74.jpg
           SLACK_MESSAGE: 'Build ${{github.ref_name}} failed '
           SLACK_TITLE: Build status
-          SLACK_USERNAME: oksana demidovec
+          SLACK_USERNAME: incoming-webhook
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
