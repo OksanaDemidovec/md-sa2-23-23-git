@@ -1,0 +1,70 @@
+name: Publish Docker image
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  push_to_registries:
+    name: Push Docker image
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v3
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: OksanaDemidovec/md-sa2-23-23-github
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.CR_TOKEN }}
+      - name: Log in to the Docker hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push Docker images for server
+        uses: isbang/compose-action@v1.4.1
+        with:
+          compose-file: "./08.Docker-compose/docker-compose.yaml"
+          down-flags: "--volumes"
+          services: |
+            server
+            client
+
+
+      - name: Slack SUCCESS Notification
+        uses: rtCamp/action-slack-notify@v2
+        if: success()
+        env:
+          SLACK_CHANNEL: "#git_md-sa2-23-23"
+          SLACK_COLOR: 'green'
+          SLACK_ICON: https://github.com/rtCamp.png?size=48
+          SLACK_MESSAGE: 'Build ${{github.ref_name}} success '
+          SLACK_TITLE: Build status
+          SLACK_USERNAME: incoming-webhook
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+      - name: Slack FAIL Notification
+        uses: rtCamp/action-slack-notify@v2
+        if: failure()
+        env:
+          SLACK_CHANNEL: "#git_md-sa2-23-23"
+          SLACK_COLOR: 'red'
+          SLACK_ICON: https://avatars.slack-edge.com/temp/2023-04-04/5047162897927_64e65181837c0ae8bd74.jpg
+          SLACK_MESSAGE: 'Build ${{github.ref_name}} failed '
+          SLACK_TITLE: Build status
+          SLACK_USERNAME: incoming-webhook
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
