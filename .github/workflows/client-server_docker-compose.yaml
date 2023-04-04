@@ -17,7 +17,12 @@ jobs:
       contents: read
     steps:
       - name: Check out the repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: OksanaDemidovec/md-sa2-23-23-github
 
       - name: Log in to the Container registry
         uses: docker/login-action@v1
