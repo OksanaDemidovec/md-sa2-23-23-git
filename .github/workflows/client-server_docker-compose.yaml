@@ -30,7 +30,7 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build and push Docker images for server
+      - name: Build and push Docker images for server and client
         uses: isbang/compose-action@v1.4.1
         with:
           compose-file: "./08.Docker-compose/docker-compose.yaml"
@@ -38,6 +38,8 @@ jobs:
           services: |
             server
             client
+      - name: Save server response to file
+        run: curl <http://localhost:8000> > curl.log      
       - name: Slack SUCCESS Notification
         uses: rtCamp/action-slack-notify@v2
         if: success()
@@ -60,3 +62,9 @@ jobs:
           SLACK_TITLE: Build status
           SLACK_USERNAME: incoming-webhook
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: curl
+          path: |
+            curl.log
