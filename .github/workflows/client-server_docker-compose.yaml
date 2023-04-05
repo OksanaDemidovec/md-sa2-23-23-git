@@ -38,9 +38,7 @@ jobs:
           down-flags: "--volumes"
           services: |
             server
-            client
-      - name: Save server response to file
-        run: curl <http://localhost:8000> > curl.log      
+            client      
       - name: Slack SUCCESS Notification
         uses: rtCamp/action-slack-notify@v2
         if: success()
@@ -68,4 +66,4 @@ jobs:
         with:
           name: curl
           path: |
-            curl.log
+            /client/curl.log
