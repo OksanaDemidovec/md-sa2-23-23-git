@@ -38,7 +38,12 @@ jobs:
           down-flags: "--volumes"
           services: |
             server
-            client      
+            client  
+      - name: Save curl.log as artifact
+        run: |
+          mkdir -p artifacts
+          docker cp 08docker-compose_client_1:/client/curl.log artifacts
+        if: always()      
       - name: Slack SUCCESS Notification
         uses: rtCamp/action-slack-notify@v2
         if: success()
