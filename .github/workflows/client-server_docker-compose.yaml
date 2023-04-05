@@ -66,4 +66,4 @@ jobs:
         with:
           name: curl
           path: |
-            /client/curl.log
+            /curl.log
