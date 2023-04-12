@@ -1,0 +1,73 @@
+name: Publish Docker image
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - '*'
+ env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}     
+jobs:
+  push_to_registries:
+    name: Push Docker image
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v3
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: OksanaDemidovec/md-sa2-23-23-github
+      - name: Log in to the Container registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.CR_TOKEN }}
+      - name: Log in to the Docker hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
+        with:
+          images: |
+            oksanademidovec/sa.it-academy.by
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+      
+      - name: Build and push Docker image
+        uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+      - name: Slack SUCCESS Notification
+        uses: rtCamp/action-slack-notify@v2
+        if: success()
+        env:
+          SLACK_CHANNEL: "#git_md-sa2-23-23"
+          SLACK_COLOR: '#green'
+          SLACK_ICON: https://github.com/rtCamp.png?size=48
+          SLACK_MESSAGE: 'Build wit tag ${{github.ref_name}} success '
+          SLACK_TITLE: Build status
+          SLACK_USERNAME: incoming-webhook
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+      - name: Slack FAIL Notification
+        uses: rtCamp/action-slack-notify@v2
+        if: failure()
+        env:
+          SLACK_CHANNEL: "#git_md-sa2-23-23"
+          SLACK_COLOR: '#red'
+          SLACK_ICON: https://avatars.slack-edge.com/temp/2023-04-04/5047162897927_64e65181837c0ae8bd74.jpg
+          SLACK_MESSAGE: 'Build with tag ${{github.ref_name}} failed '
+          SLACK_TITLE: Build status
+          SLACK_USERNAME: incoming-webhook
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+      
