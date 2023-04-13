@@ -18,7 +18,7 @@ jobs:
       - name: Check out the repo
         uses: actions/checkout@v3
       - name: Docker meta
-        id: meta_
+        id: meta
         uses: docker/metadata-action@v4
         with:
           images: OksanaDemidovec/md-sa2-23-23-github
